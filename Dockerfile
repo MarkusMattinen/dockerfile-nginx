@@ -8,6 +8,7 @@
 #
 
 FROM markusma/confd:trusty
+MAINTAINER Markus Mattinen <docker@gamma.fi>
 
 RUN apt-get update \
  && apt-get build-dep -y nginx \
