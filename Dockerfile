@@ -67,6 +67,7 @@ RUN apt-get update \
  && cd /tmp \
  && rm -rf nginx-$NGINX_VERSION.tar.gz nginx-$NGINX_VERSION \
  && apt-get autoremove -y \
+ && apt-get install -y --no-install-recommends libxslt1.1 libxml2 libgeoip1 \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
