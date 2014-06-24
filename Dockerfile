@@ -10,15 +10,12 @@
 FROM markusma/confd:trusty
 MAINTAINER Markus Mattinen <docker@gamma.fi>
 
-RUN apt-get update \
- && apt-get build-dep -y nginx \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 ENV NGINX_VERSION 1.5.13
 ENV HEADERS_MORE_VERSION 0.25
 
-RUN cd /tmp \
+RUN apt-get update \
+ && apt-get build-dep -o APT::Get::Build-Dep-Automatic=true -y nginx \
+ && cd /tmp \
  && wget http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
  && tar xzf nginx-$NGINX_VERSION.tar.gz \
  && cd nginx-$NGINX_VERSION \
@@ -68,7 +65,10 @@ RUN cd /tmp \
  && make -j`nproc` \
  && make install \
  && cd /tmp \
- && rm -rf nginx-$NGINX_VERSION.tar.gz nginx-$NGINX_VERSION
+ && rm -rf nginx-$NGINX_VERSION.tar.gz nginx-$NGINX_VERSION \
+ && apt-get autoremove -y \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi \
  && chown -R www-data:www-data /var/lib/nginx
