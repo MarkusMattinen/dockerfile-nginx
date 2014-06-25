@@ -19,6 +19,7 @@ RUN apt-get update \
  && wget http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
  && tar xzf nginx-$NGINX_VERSION.tar.gz \
  && cd nginx-$NGINX_VERSION \
+ && sed -i "s/#define NGX_HTTP_AUTOINDEX_NAME_LEN.*/#define NGX_HTTP_AUTOINDEX_NAME_LEN 200/g" src/http/modules/ngx_http_autoindex_module.c \
  && mkdir -p modules \
  && cd modules \
  && wget https://github.com/openresty/headers-more-nginx-module/archive/v$HEADERS_MORE_VERSION.tar.gz -O headers-more-$HEADERS_MORE_VERSION.tar.gz \
