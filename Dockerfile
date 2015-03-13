@@ -7,7 +7,7 @@
 # (included from /etc/nginx/nginx.conf inside http context)
 #
 
-FROM markusma/confd:trusty
+FROM markusma/confd:0.8.0
 MAINTAINER Markus Mattinen <docker@gamma.fi>
 
 ENV NGINX_VERSION 1.5.13
