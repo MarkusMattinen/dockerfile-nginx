@@ -10,7 +10,7 @@
 FROM markusma/confd:0.8.0
 MAINTAINER Markus Mattinen <docker@gamma.fi>
 
-ENV NGINX_VERSION 1.5.13
+ENV NGINX_VERSION 1.7.10
 ENV HEADERS_MORE_VERSION 0.25
 
 RUN apt-get update \
