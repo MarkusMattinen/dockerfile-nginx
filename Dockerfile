@@ -15,6 +15,7 @@ ENV HEADERS_MORE_VERSION 0.25
 
 RUN apt-get update \
  && apt-get build-dep -o APT::Get::Build-Dep-Automatic=true -y nginx \
+ && apt-get install -y --no-install-recommends git libldap2-dev \
  && cd /tmp \
  && wget http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
  && tar xzf nginx-$NGINX_VERSION.tar.gz \
@@ -24,6 +25,7 @@ RUN apt-get update \
  && cd modules \
  && wget https://github.com/openresty/headers-more-nginx-module/archive/v$HEADERS_MORE_VERSION.tar.gz -O headers-more-$HEADERS_MORE_VERSION.tar.gz \
  && tar xzf headers-more-$HEADERS_MORE_VERSION.tar.gz \
+ && git clone https://github.com/MarkusMattinen/nginx-auth-ldap.git auth-ldap \
  && cd .. \
  && ./configure \
     --prefix=/var/www \
@@ -63,6 +65,7 @@ RUN apt-get update \
     --without-mail_smtp_module \
     --without-mail_pop3_module \
     --add-module=modules/headers-more-nginx-module-$HEADERS_MORE_VERSION \
+    --add-module=modules/auth-ldap \
  && make -j`nproc` \
  && make install \
  && cd /tmp \
