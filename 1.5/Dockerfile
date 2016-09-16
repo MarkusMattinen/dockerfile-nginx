@@ -1,18 +1,20 @@
-# nginx, confd and supervisord on trusty
+# nginx, confd and supervisord on Ubuntu Trusty
+#
+# Additional nginx modules included:
+# - headers_more
 #
 # To use: add application-specific settings in /etc/nginx/server.conf
 # (included from /etc/nginx/nginx.conf inside http context)
 #
 
 FROM markusma/confd:0.9
-MAINTAINER Markus Mattinen <docker@gamma.fi>
+MAINTAINER Markus Mattinen <markus@gamma.fi>
 
-ENV NGINX_VERSION 1.10.1
-ENV HEADERS_MORE_VERSION 0.31
+ENV NGINX_VERSION 1.5.13
+ENV HEADERS_MORE_VERSION 0.25
 
-RUN add-apt-repository --enable-source ppa:nginx/stable \
- && apt-get update \
- && apt-get build-dep -o APT::Get::Build-Dep-Automatic=true -y nginx=$NGINX_VERSION \
+RUN apt-get update \
+ && apt-get build-dep -o APT::Get::Build-Dep-Automatic=true -y nginx \
  && cd /tmp \
  && wget http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
  && tar xzf nginx-$NGINX_VERSION.tar.gz \
@@ -36,41 +38,37 @@ RUN add-apt-repository --enable-source ppa:nginx/stable \
     --http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
     --lock-path=/var/lock/nginx.lock \
     --pid-path=/run/nginx.pid \
-    --prefix=/usr/share/nginx \
+    --prefix=/var/www \
     --sbin-path=/usr/sbin/nginx \
     --user=www-data \
     --with-debug \
     --with-http_addition_module \
-    --with-http_auth_request_module \
     --with-http_dav_module \
     --with-http_flv_module \
     --with-http_geoip_module \
-    --with-http_gunzip_module \
     --with-http_gzip_static_module \
     --with-http_image_filter_module \
     --with-http_mp4_module \
-    --with-http_perl_module \
     --with-http_random_index_module \
     --with-http_realip_module \
     --with-http_secure_link_module \
     --with-http_ssl_module \
     --with-http_stub_status_module \
     --with-http_sub_module \
-    --with-http_v2_module \
     --with-http_xslt_module \
     --with-ipv6 \
-    --with-mail \
-    --with-mail_ssl_module \
+    --with-md5=/usr/include/openssl \
     --with-pcre-jit \
-    --with-stream \
-    --with-stream_ssl_module \
-    --with-threads \
+    --with-sha1=/usr/include/openssl \
+    --without-mail_imap_module \
+    --without-mail_pop3_module \
+    --without-mail_smtp_module \
  && make -j`nproc` \
  && make install \
  && cd /tmp \
  && rm -rf nginx-$NGINX_VERSION.tar.gz nginx-$NGINX_VERSION \
  && apt-get autoremove -y \
- && apt-get install -y --no-install-recommends libxslt1.1 libxml2 libgeoip1 libgd3 \
+ && apt-get install -y --no-install-recommends libxslt1.1 libxml2 libgeoip1 \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
