@@ -8,7 +8,6 @@
 #
 
 FROM markusma/confd:0.9
-MAINTAINER Markus Mattinen <markus@gamma.fi>
 
 ENV NGINX_VERSION 1.10.1
 ENV HEADERS_MORE_VERSION 0.31
@@ -80,5 +79,4 @@ RUN add-apt-repository --enable-source ppa:nginx/stable \
 RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi \
  && chown -R www-data:www-data /var/lib/nginx
 
-ADD config/etc/nginx/nginx.conf /etc/nginx/nginx.conf
-ADD config/etc/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/nginx.conf
+COPY etc/ /etc/
