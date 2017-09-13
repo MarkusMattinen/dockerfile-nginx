@@ -9,8 +9,8 @@
 
 FROM markusma/confd:0.9
 
-ENV NGINX_VERSION 1.10.1
-ENV HEADERS_MORE_VERSION 0.31
+ENV NGINX_VERSION 1.10.3
+ENV HEADERS_MORE_VERSION 0.32
 
 RUN add-apt-repository --enable-source ppa:nginx/stable \
  && apt-get update \
