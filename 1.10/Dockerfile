@@ -11,6 +11,7 @@ FROM markusma/confd:0.9
 
 ENV NGINX_VERSION 1.10.3
 ENV HEADERS_MORE_VERSION 0.32
+ENV DAV_EXT_VERSION 3.0.0
 
 RUN add-apt-repository --enable-source ppa:nginx/stable \
  && apt-get update \
@@ -24,9 +25,12 @@ RUN add-apt-repository --enable-source ppa:nginx/stable \
  && cd modules \
  && wget https://github.com/openresty/headers-more-nginx-module/archive/v$HEADERS_MORE_VERSION.tar.gz -O headers-more-$HEADERS_MORE_VERSION.tar.gz \
  && tar xzf headers-more-$HEADERS_MORE_VERSION.tar.gz \
+ && wget https://github.com/arut/nginx-dav-ext-module/archive/v$DAV_EXT_VERSION.tar.gz -O nginx-dav-ext-module-$DAV_EXT_VERSION.tar.gz \
+ && tar xzf nginx-dav-ext-module-$DAV_EXT_VERSION.tar.gz \
  && cd .. \
  && ./configure \
     --add-module=modules/headers-more-nginx-module-$HEADERS_MORE_VERSION \
+    --add-module=modules/nginx-dav-ext-module-$DAV_EXT_VERSION \
     --conf-path=/etc/nginx/nginx.conf \
     --error-log-path=/var/log/nginx/error.log \
     --group=www-data \
