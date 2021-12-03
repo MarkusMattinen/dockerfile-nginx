@@ -1,2 +1,4 @@
 #!/usr/bin/execlineb -P
+
+with-contenv
 /usr/sbin/nginx -c /etc/nginx/nginx.conf
