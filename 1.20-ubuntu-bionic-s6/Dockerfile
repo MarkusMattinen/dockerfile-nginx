@@ -9,14 +9,17 @@
 
 FROM markusma/confd:0.16-ubuntu-bionic-s6
 
-ENV NGINX_VERSION 1.16.1
+ENV NGINX_VERSION 1.20.2
 ENV HEADERS_MORE_VERSION 0.33
 
-RUN apt-get update \
- && apt-get install -y --no-install-recommends software-properties-common \
- && add-apt-repository --enable-source ppa:nginx/stable \
+RUN echo "deb http://nginx.org/packages/ubuntu/ bionic nginx" > /etc/apt/sources.list.d/nginx.org.list \
+ && echo "deb-src http://nginx.org/packages/ubuntu/ bionic nginx" >> /etc/apt/sources.list.d/nginx.org.list \
+ && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ABF5BD827BD9BF62 \
  && apt-get update \
+ && apt-get install -y --no-install-recommends libxslt1.1 libxml2 libgeoip1 libgd3 perl \
  && apt-get build-dep -o APT::Get::Build-Dep-Automatic=true -y nginx=$NGINX_VERSION \
+ && apt-get install -y --no-install-recommends libxslt-dev libxml2-dev libgeoip-dev libgd-dev libperl-dev \
+ && apt-mark auto libxslt-dev libxml2-dev libgeoip-dev libgd-dev libperl-dev \
  && cd /tmp \
  && wget http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
  && tar xzf nginx-$NGINX_VERSION.tar.gz \
@@ -73,8 +76,7 @@ RUN apt-get update \
  && make install \
  && cd /tmp \
  && rm -rf nginx-$NGINX_VERSION.tar.gz nginx-$NGINX_VERSION \
- && apt-get purge -y --autoremove -o APT::AutoRemove::RecommendsImportant=false software-properties-common \
- && apt-get install -y --no-install-recommends libxslt1.1 libxml2 libgeoip1 libgd3 perl \
+ && apt-get autoremove -y -o APT::AutoRemove::RecommendsImportant=false \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* $HOME/.cache
 
